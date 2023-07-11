@@ -124,7 +124,7 @@ with st.sidebar:
     st.write("\n")
     st.write("\n")
     st.text_input("设定窗口名称：", key="set_chat_name", placeholder="点击输入")
-    st.selectbox("选择模型：", index=0, options=['gpt-3.5-turbo', 'gpt-4'], key="select_model")
+    st.selectbox("选择模型：", index=0, options=['gpt-3.5-turbo'], key="select_model")
     st.write("\n")
     st.caption("""
     - 双击页面可直接定位输入栏
