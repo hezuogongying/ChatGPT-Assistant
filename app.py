@@ -217,7 +217,7 @@ with tap_context:
         index=context_select_index,
         on_change=callback_fun,
         args=("context_select",))
-    # st.caption(set_context_all[st.session_state['context_select' + current_chat]])
+    st.caption("请注意,为了避免您的数据遗失,建议在得到满意的结果后便导出记录,下载到本地")
 
     # st.text_area(
     #     label='补充或自定义上下文：', key="context_input" + current_chat,
