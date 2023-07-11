@@ -207,6 +207,8 @@ tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ �
 with tap_context:
     set_context_list = list(set_context_all.keys())
     set_context_list.pop(0)
+    if st.session_state.get('context_select' + current_chat + "value") == '不设置':
+        st.session_state['context_select' + current_chat + "value"] = '会议纪要生成'
     context_select_index = set_context_list.index(st.session_state['context_select' + current_chat + "value"])
     st.selectbox(
         label='选择功能模块',
