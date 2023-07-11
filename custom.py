@@ -23,7 +23,7 @@ initial_content_all = {
         "frequency_penalty": 0.0,
     },
     "contexts": {
-        'context_select': '不设置',
+        'context_select': '会议纪要生成',
         'context_input': '',
         'context_level': 4
     }
