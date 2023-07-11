@@ -200,13 +200,13 @@ area_error = st.empty()
 
 st.write("\n")
 st.header('Digital Aurora Assistant')
-tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ 预设', '⚙️ 模型', '🛠️ 功能'])
+tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ 功能', '⚙️ 模型', '🛠️ 管理'])
 
 with tap_context:
     set_context_list = list(set_context_all.keys())
     context_select_index = set_context_list.index(st.session_state['context_select' + current_chat + "value"])
     st.selectbox(
-        label='选择上下文',
+        label='选择功能模块',
         options=set_context_list,
         key='context_select' + current_chat,
         index=context_select_index,
@@ -214,10 +214,10 @@ with tap_context:
         args=("context_select",))
     # st.caption(set_context_all[st.session_state['context_select' + current_chat]])
 
-    st.text_area(
-        label='补充或自定义上下文：', key="context_input" + current_chat,
-        value=st.session_state['context_input' + current_chat + "value"],
-        on_change=callback_fun, args=("context_input",))
+    # st.text_area(
+    #     label='补充或自定义上下文：', key="context_input" + current_chat,
+    #     value=st.session_state['context_input' + current_chat + "value"],
+    #     on_change=callback_fun, args=("context_input",))
 
 with tap_model:
     st.markdown("OpenAI API Key (可选)")
