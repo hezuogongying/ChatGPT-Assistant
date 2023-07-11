@@ -206,6 +206,7 @@ tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ �
 
 with tap_context:
     set_context_list = list(set_context_all.keys())
+    set_context_list.pop("不设置")
     context_select_index = set_context_list.index(st.session_state['context_select' + current_chat + "value"])
     st.selectbox(
         label='选择功能模块',
