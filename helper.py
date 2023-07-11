@@ -136,16 +136,21 @@ def extract_chars(text: str, num: int) -> str:
 
 
 @st.cache_data(max_entries=20, show_spinner=False)
-def download_history(history: list):
+def download_history(history: list, file_ext: str):
     md_text = ""
     for msg in history:
         if msg['role'] == 'user':
             md_text += f'## {user_name}：\n{msg["content"]}\n'
         elif msg['role'] == 'assistant':
             md_text += f'## {gpt_name}：\n{msg["content"]}\n'
-    output = io.BytesIO()
-    output.write(md_text.encode('utf-8'))
-    output.seek(0)
+    if file_ext == 'pdf':
+        import markdown
+        # 使用 markdown 库将 Markdown 转换为 HTML
+        output = markdown.markdown(md_text)
+    else:
+        output = io.BytesIO()
+        output.write(md_text.encode('utf-8'))
+        output.seek(0)
     return output
 
 
