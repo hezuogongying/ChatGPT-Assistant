@@ -52,6 +52,8 @@ with st.sidebar:
 
 # 数据写入文件
 def write_data(new_chat_name=current_chat):
+    if ("context_input" + current_chat) not in st.session_state:
+        st.session_state["context_input" + current_chat] = ""
     if "apikey" in st.secrets:
         st.session_state["paras"] = {
             "temperature": st.session_state["temperature" + current_chat],
