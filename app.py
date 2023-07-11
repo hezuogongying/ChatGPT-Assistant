@@ -8,7 +8,7 @@ from requests.models import ChunkedEncodingError
 from streamlit.components import v1
 from voice_toolkit import voice_toolkit
 
-st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='🤖')
+st.set_page_config(page_title='Digital Aurora Assistant', layout='wide', page_icon='🤖')
 # 自定义元素样式
 st.markdown(css_code, unsafe_allow_html=True)
 
@@ -128,8 +128,8 @@ with st.sidebar:
     - 双击页面可直接定位输入栏
     - Ctrl + Enter 可快捷提交问题
     """)
-    st.markdown('<a href="https://github.com/PierXuY/ChatGPT-Assistant" target="_blank" rel="ChatGPT-Assistant">'
-                '<img src="https://badgen.net/badge/icon/GitHub?icon=github&amp;label=ChatGPT Assistant" alt="GitHub">'
+    st.markdown('<a href="https://github.com/bfpbr5/ChatGPT-Assistant" target="_blank" rel="Digital-Aurora-Assistant">'
+                '<img src="https://badgen.net/badge/icon/GitHub?icon=github&amp;label=Digital Aurora Assistant" alt="GitHub">'
                 '</a>', unsafe_allow_html=True)
 
 # 加载数据
@@ -199,7 +199,7 @@ area_gpt_content = st.empty()
 area_error = st.empty()
 
 st.write("\n")
-st.header('ChatGPT Assistant')
+st.header('Digital Aurora Assistant')
 tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ 预设', '⚙️ 模型', '🛠️ 功能'])
 
 with tap_context:
@@ -253,17 +253,32 @@ with tap_model:
     st.caption("[官网参数说明](https://platform.openai.com/docs/api-reference/completions/create)")
 
 with tab_func:
-    c1, c2 = st.columns(2)
+    c0, c1, c2 = st.columns(3)
+    file_ext = 'md'
+    with c0:
+        # 创建一个下拉菜单
+        file_ext = st.selectbox('请选择文件导出格式',('md', 'docx', 'pdf'))
+        st.write("\n")
     with c1:
         st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
     with c2:
+        file_name = f'{current_chat.split("_")[0]}.{file_ext}'
+        data_row = download_history(st.session_state['history' + current_chat])
+        if file_ext == 'md':
+            mime_str = "text/markdown"
+        elif file_ext == 'docx':
+            mime_str = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        elif file_ext == 'pdf':
+            mime_str = "application/pdf"
+        
         btn = st.download_button(
             label="导出聊天记录",
-            data=download_history(st.session_state['history' + current_chat]),
-            file_name=f'{current_chat.split("_")[0]}.md',
-            mime="text/markdown",
+            data=data_row,
+            file_name=file_name,
+            mime=mime_str,
             use_container_width=True
         )
+    
     st.write("\n")
     st.markdown("自定义功能：")
     c1, c2 = st.columns(2)
