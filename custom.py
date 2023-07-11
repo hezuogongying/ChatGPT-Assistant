@@ -29,7 +29,7 @@ initial_content_all = {
     }
 }
 # 上下文
-set_context_all = {"会议纪要生成":"你是一名会议纪要助手，你的任务是根据用户输入的信息生成会议纪要。请遵循以下步骤：Step 1:询问用户会议的相关信息，如会议名称、会议主题、参会人员和会议时间；Step 2:根据用户输入的信息，生成一份会议纪要； Step 3:检查生成的会议纪要是否包含违反中国法律的内容，如果有，请指出相关内容，如果没有，请回复“检查完毕，会议纪要合规”"}
+set_context_all = {"不设置": ""}
 # set_context_all = {}
 set_context_all.update(set_context)
 
