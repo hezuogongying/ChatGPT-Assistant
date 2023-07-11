@@ -339,6 +339,8 @@ def get_model_input():
     context_level = st.session_state['context_level' + current_chat]
     history = (get_history_input(st.session_state["history" + current_chat], context_level) +
                [{"role": "user", "content": st.session_state['pre_user_input_content']}])
+    if ("context_input" + current_chat) not in st.session_state:
+        st.session_state["context_input" + current_chat] = ""
     for ctx in [st.session_state['context_input' + current_chat],
                 set_context_all[st.session_state['context_select' + current_chat]]]:
         if ctx != "":
