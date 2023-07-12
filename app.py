@@ -263,16 +263,13 @@ with tab_func:
         st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
     with c2:
         file_name = f'{current_chat.split("_")[0]}.{file_ext}'
-        data_row = download_history(st.session_state['history' + current_chat], file_ext)
+        data_row = download_history(st.session_state['history' + current_chat])
         if file_ext == 'md':
             mime_str = "text/markdown"
         elif file_ext == 'docx':
             mime_str = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         elif file_ext == 'pdf':
             mime_str = "application/pdf"
-            # 使用 pdfkit 将 HTML 转换为 PDF
-            import pdfkit
-            pdfkit.from_string(data_row, file_name)
         
         btn = st.download_button(
             label="导出聊天记录",
