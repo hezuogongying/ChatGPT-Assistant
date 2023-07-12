@@ -52,8 +52,6 @@ with st.sidebar:
 
 # 数据写入文件
 def write_data(new_chat_name=current_chat):
-    if ("context_input" + current_chat) not in st.session_state:
-        st.session_state["context_input" + current_chat] = ""
     if "apikey" in st.secrets:
         st.session_state["paras"] = {
             "temperature": st.session_state["temperature" + current_chat],
@@ -124,7 +122,7 @@ with st.sidebar:
     st.write("\n")
     st.write("\n")
     st.text_input("设定窗口名称：", key="set_chat_name", placeholder="点击输入")
-    st.selectbox("选择模型：", index=0, options=['gpt-3.5-turbo'], key="select_model")
+    st.selectbox("选择模型：", index=0, options=['gpt-3.5-turbo', 'gpt-4'], key="select_model")
     st.write("\n")
     st.caption("""
     - 双击页面可直接定位输入栏
@@ -202,27 +200,24 @@ area_error = st.empty()
 
 st.write("\n")
 st.header('Digital Aurora Assistant')
-tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ 功能', '⚙️ 模型', '🛠️ 管理'])
+tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ 预设', '⚙️ 模型', '🛠️ 功能'])
 
 with tap_context:
     set_context_list = list(set_context_all.keys())
-    set_context_list.pop(0)
-    if st.session_state.get('context_select' + current_chat + "value") == '不设置':
-        st.session_state['context_select' + current_chat + "value"] = '会议纪要生成'
     context_select_index = set_context_list.index(st.session_state['context_select' + current_chat + "value"])
     st.selectbox(
-        label='选择功能模块',
+        label='选择上下文',
         options=set_context_list,
         key='context_select' + current_chat,
         index=context_select_index,
         on_change=callback_fun,
         args=("context_select",))
-    st.caption("请注意,为了避免您的数据遗失,建议在得到满意的结果后便导出记录,下载到本地")
+    st.caption(set_context_all[st.session_state['context_select' + current_chat]])
 
-    # st.text_area(
-    #     label='补充或自定义上下文：', key="context_input" + current_chat,
-    #     value=st.session_state['context_input' + current_chat + "value"],
-    #     on_change=callback_fun, args=("context_input",))
+    st.text_area(
+        label='补充或自定义上下文：', key="context_input" + current_chat,
+        value=st.session_state['context_input' + current_chat + "value"],
+        on_change=callback_fun, args=("context_input",))
 
 with tap_model:
     st.markdown("OpenAI API Key (可选)")
@@ -345,8 +340,6 @@ def get_model_input():
     context_level = st.session_state['context_level' + current_chat]
     history = (get_history_input(st.session_state["history" + current_chat], context_level) +
                [{"role": "user", "content": st.session_state['pre_user_input_content']}])
-    if ("context_input" + current_chat) not in st.session_state:
-        st.session_state["context_input" + current_chat] = ""
     for ctx in [st.session_state['context_input' + current_chat],
                 set_context_all[st.session_state['context_select' + current_chat]]]:
         if ctx != "":
