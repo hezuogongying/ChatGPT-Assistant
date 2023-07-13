@@ -362,6 +362,7 @@ def get_model_input():
     return history, paras
 
 
+# The following code should replace the part of the code starting from 'if st.session_state['user_input_content'] != '':'
 if st.session_state['user_input_content'] != '':
     if 'r' in st.session_state:
         st.session_state.pop("r")
@@ -399,9 +400,26 @@ if st.session_state['user_input_content'] != '':
         except openai.error.RateLimitError as e:
             area_error.error("请求受限。报错：   \n" + str(e.args[0]))
         else:
+            # Save the chatbot response
             st.session_state["chat_of_r"] = current_chat
             st.session_state["r"] = r
-            st.experimental_rerun()
+            # Now, let's check if the response is complete.
+            history_need_input_check = copy.deepcopy(history_need_input)
+            history_need_input_check.append({
+                "role": "user",
+                "content": "If the last conversation shows the user is waiting for the response, answer 'no'. If not, answer 'yes'. Do not answer any other additional text other than the single words."
+            })
+            r_check = openai.ChatCompletion.create(model=st.session_state["select_model"], 
+                                                   messages=history_need_input_check, 
+                                                   stream=True,
+                                                   **paras_need_input_check)
+            # If the response to the check is "No", then we automatically send a "continue" message.
+            if "no" in r_check["choices"][0]["text"]:
+                st.session_state['pre_user_input_content'] = "continue."
+                st.experimental_rerun()
+            else:
+                st.experimental_rerun()
+
 
 if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"]):
     if current_chat + 'report' not in st.session_state:
