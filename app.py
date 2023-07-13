@@ -262,7 +262,7 @@ with tab_func:
     file_ext = 'md'
     with c0:
         # 创建一个下拉菜单
-        file_ext = st.selectbox('请选择文件导出格式',('md', 'docx', 'pdf'))
+        file_ext = st.selectbox('请选择文件导出格式',('md', 'docx'))
         st.write("\n")
     with c1:
         st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
