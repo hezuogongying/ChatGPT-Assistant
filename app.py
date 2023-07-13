@@ -411,14 +411,10 @@ if st.session_state['user_input_content'] != '':
             })
             r_check = openai.ChatCompletion.create(model=st.session_state["select_model"], 
                                                    messages=history_need_input_check, 
-                                                   stream=True,
+                                                   stream=False,
                                                    **paras_need_input)
-            response_check = ""
-            for message in r_check:
-                if 'choices' in message:
-                    response_check += message['choices'][0]['delta']['content']
             # If the response to the check is "No", then we automatically send a "continue" message.
-            if "no" in response_check:
+            if "no" in r_check["choices"][0]["content"]:
                 st.session_state['pre_user_input_content'] = "continue."
                 st.experimental_rerun()
             else:
