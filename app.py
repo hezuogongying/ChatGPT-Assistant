@@ -7,6 +7,10 @@ import openai
 from requests.models import ChunkedEncodingError
 from streamlit.components import v1
 from voice_toolkit import voice_toolkit
+import promptlayer
+
+promptlayer.api_key = "pl_6693b063dd1e5bc294f4fb3e18820039"
+openai = promptlayer.openai
 
 st.set_page_config(page_title='Digital Aurora Assistant', layout='wide', page_icon='🤖')
 # 自定义元素样式
