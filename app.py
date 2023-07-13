@@ -369,41 +369,42 @@ if st.session_state['user_input_content'] != '':
         st.session_state[current_chat + 'report'] = ""
     st.session_state['pre_user_input_content'] = st.session_state['user_input_content']
     st.session_state['user_input_content'] = ''
-    # 临时展示
+    # Show temporary display
     show_each_message(st.session_state['pre_user_input_content'], 'user', 'tem',
                       [area_user_svg.markdown, area_user_content.markdown])
-    # 模型输入
+    # Model input
     history_need_input, paras_need_input = get_model_input()
-    # 调用接口
+    # Call API
     with st.spinner("🤔"):
         try:
             if apikey := st.session_state['apikey_input']:
                 openai.api_key = apikey
-            # 配置临时apikey，此时不会留存聊天记录，适合公开使用
+            # Configure temporary apikey, chat records will not be saved at this time, suitable for public use
             elif "apikey_tem" in st.secrets:
                 openai.api_key = st.secrets["apikey_tem"]
-            # 注：当st.secrets中配置apikey后将会留存聊天记录，即使未使用此apikey
+            # Note: When apikey is configured in st.secrets, chat records will be saved even if this apikey is not used
             else:
                 openai.api_key = st.secrets["apikey"]
             r = openai.ChatCompletion.create(model=st.session_state["select_model"], messages=history_need_input,
                                              stream=True,
                                              **paras_need_input)
         except (FileNotFoundError, KeyError):
-            area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在模型选项中进行临时配置。"
-                             "详情见[项目仓库](https://github.com/PierXuY/ChatGPT-Assistant)。")
+            area_error.error("OpenAI API Key missing, please configure Secrets after copying the project, or make temporary configurations in the model options. Details see [project repository](https://github.com/PierXuY/ChatGPT-Assistant).")
         except openai.error.AuthenticationError:
-            area_error.error("无效的 OpenAI API Key。")
+            area_error.error("Invalid OpenAI API Key.")
         except openai.error.APIConnectionError as e:
-            area_error.error("连接超时，请重试。报错：   \n" + str(e.args[0]))
+            area_error.error("Connection timed out, please try again. Error:   \n" + str(e.args[0]))
         except openai.error.InvalidRequestError as e:
-            area_error.error("无效的请求，请重试。报错：   \n" + str(e.args[0]))
+            area_error.error("Invalid request, please try again. Error:   \n" + str(e.args[0]))
         except openai.error.RateLimitError as e:
-            area_error.error("请求受限。报错：   \n" + str(e.args[0]))
+            area_error.error("Request limited. Error:   \n" + str(e.args[0]))
         else:
             # Save the chatbot response
             st.session_state["chat_of_r"] = current_chat
             st.session_state["r"] = r
             # Now, let's check if the response is complete.
+            # Append the assistant's response to the history_need_input
+            history_need_input.append({"role": "assistant", "content": r['choices'][0]['message']['content']})
             history_need_input_check = copy.deepcopy(history_need_input)
             history_need_input_check.append({
                 "role": "user",
@@ -413,12 +414,13 @@ if st.session_state['user_input_content'] != '':
                                                    messages=history_need_input_check, 
                                                    stream=False,
                                                    **paras_need_input)
-            # If the response to the check is "No", then we automatically send a "continue" message.
+            # If the response to the check is "Yes", then we automatically send a "continue" message.
             if "yes" in r_check["choices"][0]['message']["content"]:
                 st.session_state['pre_user_input_content'] = "continue."
                 st.experimental_rerun()
             else:
                 st.experimental_rerun()
+
 
 
 if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"]):
