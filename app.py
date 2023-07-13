@@ -407,14 +407,14 @@ if st.session_state['user_input_content'] != '':
             history_need_input_check = copy.deepcopy(history_need_input)
             history_need_input_check.append({
                 "role": "user",
-                "content": "If the last conversation shows the user is waiting for the response, answer 'no'. If not, answer 'yes'. Do not answer any other additional text other than the single words."
+                "content": "If the last conversation shows the user is waiting for the response of assistant such as including '会议生成中,请稍等' answer 'yes'. If not, answer 'no'. Do not answer any other additional text other than the single word."
             })
             r_check = openai.ChatCompletion.create(model=st.session_state["select_model"], 
                                                    messages=history_need_input_check, 
                                                    stream=False,
                                                    **paras_need_input)
             # If the response to the check is "No", then we automatically send a "continue" message.
-            if "no" in r_check["choices"][0]['message']["content"]:
+            if "yes" in r_check["choices"][0]['message']["content"]:
                 st.session_state['pre_user_input_content'] = "continue."
                 st.experimental_rerun()
             else:
