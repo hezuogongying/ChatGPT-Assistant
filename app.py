@@ -414,7 +414,7 @@ if st.session_state['user_input_content'] != '':
                                                    stream=False,
                                                    **paras_need_input)
             # If the response to the check is "No", then we automatically send a "continue" message.
-            if "no" in r_check["choices"][0]["content"]:
+            if "no" in r_check["choices"][0]['message']["content"]:
                 st.session_state['pre_user_input_content'] = "continue."
                 st.experimental_rerun()
             else:
