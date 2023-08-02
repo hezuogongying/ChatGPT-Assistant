@@ -128,7 +128,7 @@ with st.sidebar:
     st.write("\n")
     st.write("\n")
     st.text_input("设定窗口名称：", key="set_chat_name", placeholder="点击输入")
-    st.selectbox("选择模型：", index=0, options=['gpt-3.5-turbo'], key="select_model")
+    st.selectbox("选择模型：", index=0, options=['gpt-3.5-turbo','gpt-4'], key="select_model")
     st.write("\n")
     st.caption("""
     - 双击页面可直接定位输入栏
@@ -388,13 +388,12 @@ if st.session_state['user_input_content'] != '':
                                              stream=True,
                                              **paras_need_input)
         except (FileNotFoundError, KeyError):
-            area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在模型选项中进行临时配置。"
-                             "详情见[项目仓库](https://github.com/PierXuY/ChatGPT-Assistant)。")
+            area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在模型选项中进行临时配置。")
         except openai.error.AuthenticationError:
             area_error.error("无效的 OpenAI API Key。")
         except openai.error.APIConnectionError as e:
             area_error.error("连接超时，请重试。报错：   \n" + str(e.args[0]))
-        except openai.error.InvalidRequestError as e:
+        except openai.error.InvalidRequestError as e:   
             area_error.error("无效的请求，请重试。报错：   \n" + str(e.args[0]))
         except openai.error.RateLimitError as e:
             area_error.error("请求受限。报错：   \n" + str(e.args[0]))
