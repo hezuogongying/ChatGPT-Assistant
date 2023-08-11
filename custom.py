@@ -19,8 +19,9 @@ initial_content_all = {
     "paras": {
         "temperature": 0.2,
         "top_p": 1.0,
-        "presence_penalty": 0.4,
-        "frequency_penalty": 0.4,
+        "presence_penalty": 0.2,
+        "frequency_penalty": 0.2,
+        "max_tokens": 2048
     },
     "contexts": {
         'context_select': '会议纪要生成',
