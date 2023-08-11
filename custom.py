@@ -17,7 +17,7 @@ gpt_background_color = 'rgba(225, 230, 235, 0.5)'
 initial_content_all = {
     "history": [],
     "paras": {
-        "temperature": 1.0,
+        "temperature": 0.2,
         "top_p": 1.0,
         "presence_penalty": 0.4,
         "frequency_penalty": 0.4,
