@@ -21,7 +21,7 @@ initial_content_all = {
         "top_p": 1.0,
         "presence_penalty": 0.2,
         "frequency_penalty": 0.2,
-        "max_tokens": 2048
+        "max_tokens": 4096
     },
     "contexts": {
         'context_select': '会议纪要生成',
